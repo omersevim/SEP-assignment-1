@@ -58,3 +58,51 @@ create view [view product_order sevim]
 as 
 select ProductID, count(ProductID) TotalCount from [Order Details]
 group by ProductID
+
+--5--
+create procedure sp_product_order_quantity_sevim @ProductID int
+as
+select count(ProductID) from [Order Details]
+where ProductID = @ProductID
+
+--6--
+create procedure sp_product_order_city_sevim @ProductName nvarchar(40)
+as
+select top 5 o.ShipCity, count(od.ProductID) NumOrders from Orders o inner join [Order Details] od
+on od.OrderID = o.OrderID
+group by o.ShipCity
+order by NumOrders desc
+
+--7--
+create procedure sp_move_employees_sevim
+as
+
+--8--
+
+
+--9--
+create table city_sevim (id int, City varchar(20))
+create table people_sevim (id int, Name varchar(40), City int)
+
+
+insert into city_sevim values (1, 'Seattle')
+insert into city_sevim values (2, 'Green Bay')
+
+insert into people_sevim values (1, 'Aaron Rogers', 2)
+insert into people_sevim values (2, 'Russell Wilson', 1)
+insert into people_sevim values (3, 'Jody Nelson', 2)
+
+insert into city_sevim values (3, 'Madison')
+update people_sevim
+set City = (select id from city_sevim where City = 'Madison')
+where City = (select id from city_sevim where City = 'Seattle')
+delete from city_sevim where City = 'Seattle'
+
+create view Packers_Omer_Cem_Sevim
+as 
+select * from people_sevim
+where City = (Select id from city_sevim where City = 'Green Bay')
+
+drop table city_sevim
+drop table people_sevim
+drop view Packers_Omer_Cem_Sevim
