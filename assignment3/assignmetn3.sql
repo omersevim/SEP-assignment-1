@@ -64,3 +64,5 @@ where CustomerID in (select CustomerID from Orders
 select distinct c.ContactName from Customers c left join Orders o
 on c.CustomerID = o.CustomerID
 where c.City != o.ShipCity and o.OrderID in (select OrderID from [Order Details] where Quantity != 0)
+
+--8--
