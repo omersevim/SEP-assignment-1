@@ -12,6 +12,7 @@ namespace ApplicationCore.Entities
         public int UserId { get; set; }
         public decimal? Rating { get; set; }
         public string ReviewText { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         //Navigation
         public Movie Movie { get; set; }

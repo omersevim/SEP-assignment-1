@@ -1,40 +1,37 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
+using ApplicationCore.Models.Response;
+using ApplicationCore.ServiceInterfaces;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MovieShop.MVC.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Infrastructure.Services;
-using ApplicationCore.ServiceInterfaces;
+
 
 namespace MovieShop.MVC.Controllers
 {
-   
+
     public class HomeController : Controller
     {
         private readonly IMovieService _movieService;
 
+        // Constructor Injection
         public HomeController(IMovieService movieService)
         {
+            // __movieService should have an instance of a class that implements IMovieService
             _movieService = movieService;
         }
 
-        public IActionResult Index()
+        // localhost/Home/Index
+        public async Task<IActionResult> Index()
         {
-           
-            var movies = _movieService.GetTopRevenueMovies();
-
+            var movies = await _movieService.GetTopRevenueMovies();
             ViewBag.MoviesCount = movies.Count;
             return View(movies);
         }
 
+        // localhost/Home/Privacy
         public IActionResult Privacy()
-        {
-            return View();
-        }
-        public IActionResult TopMovies()
         {
             return View();
         }

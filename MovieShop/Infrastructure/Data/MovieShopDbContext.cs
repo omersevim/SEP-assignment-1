@@ -19,36 +19,29 @@ namespace Infrastructure.Data
         //set the table properties in the database.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Trailer>(ConfigureTrailer);
             modelBuilder.Entity<Movie>(ConfigureMovie);
-            modelBuilder.Entity<Crew>(ConfigureCrew);
-            modelBuilder.Entity<MovieGenre>(ConfigureMovieGenre);
-            modelBuilder.Entity<MovieCrew>(ConfigureMovieCrew);
+            modelBuilder.Entity<Trailer>(ConfigureTrailer);
             modelBuilder.Entity<Cast>(ConfigureCast);
             modelBuilder.Entity<MovieCast>(ConfigureMovieCast);
-            modelBuilder.Entity<Role>(ConfigureRole);
             modelBuilder.Entity<User>(ConfigureUser);
-            modelBuilder.Entity<UserRole>(ConfigureUserRole);
-            modelBuilder.Entity<Review>(ConfigureReview);
+            modelBuilder.Entity<Role>(ConfigureRole);
             modelBuilder.Entity<Purchase>(ConfigurePurchase);
             modelBuilder.Entity<Favorite>(ConfigureFavorite);
+            modelBuilder.Entity<Review>(ConfigureReview);
+            modelBuilder.Entity<MovieGenre>(ConfigureMovieGenre);
         }
 
         //Add tables to the db.
         public DbSet<Genre> Genres { get; set; }
-        public DbSet<Trailer> Trailers { get; set; }
         public DbSet<Movie> Movies { get; set; }
-        public DbSet<Crew> Crews { get; set; }
-        public DbSet<MovieGenre> MovieGenres { get; set; }
-        public DbSet<MovieCrew> MovieCrews { get; set; }
+        public DbSet<Trailer> Trailers { get; set; }
         public DbSet<Cast> Casts { get; set; }
         public DbSet<MovieCast> MovieCasts { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<MovieGenre> MovieGenres { get; set; }
 
         //Table constraints.
         private void ConfigureMovie(EntityTypeBuilder<Movie> builder)
@@ -68,6 +61,7 @@ namespace Infrastructure.Data
             builder.Property(m => m.Budget).HasColumnType("decimal(18, 2)");
 
             builder.Ignore(m => m.Rating);
+            builder.Ignore(m => m.MovieGenres);
         }
         private void ConfigureTrailer(EntityTypeBuilder<Trailer> builder)
         {
@@ -77,34 +71,35 @@ namespace Infrastructure.Data
             builder.Property(t => t.Name).HasMaxLength(2084);
             builder.Property(t => t.TrailerUrl).HasMaxLength(2084);
         }
-        private void ConfigureCrew(EntityTypeBuilder<Crew> builder)
-        {
-            // specify your Fluent API rules.
-            builder.ToTable("Crew");
-            builder.HasKey(t => t.Id);
-            builder.Property(t => t.Name).HasMaxLength(128);
-        }
+        //private void ConfigureCrew(EntityTypeBuilder<Crew> builder)
+        //{
+        //    // specify your Fluent API rules.
+        //    builder.ToTable("Crew");
+        //    builder.HasKey(t => t.Id);
+        //    builder.Property(t => t.Name).HasMaxLength(128);
+        //}
         private void ConfigureMovieGenre(EntityTypeBuilder<MovieGenre> builder)
         {
             // specify your Fluent API rules.
             builder.ToTable("MovieGenre");
             builder.HasNoKey();
         }
-        private void ConfigureMovieCrew(EntityTypeBuilder<MovieCrew> builder)
-        {
-            // specify your Fluent API rules.
-            builder.ToTable("MovieCrew");
-            builder.HasNoKey();
-            builder.Property(mc => mc.Department).HasMaxLength(128);
-            builder.Property(mc => mc.Job).HasMaxLength(128);
-            builder.Property(mc => mc.Department).IsRequired();
-            builder.Property(mc => mc.Job).IsRequired();
-        }
+        //private void ConfigureMovieCrew(EntityTypeBuilder<MovieCrew> builder)
+        //{
+        //    // specify your Fluent API rules.
+        //    builder.ToTable("MovieCrew");
+        //    builder.HasNoKey();
+        //    builder.Property(mc => mc.Department).HasMaxLength(128);
+        //    builder.Property(mc => mc.Job).HasMaxLength(128);
+        //    builder.Property(mc => mc.Department).IsRequired();
+        //    builder.Property(mc => mc.Job).IsRequired();
+        //}
         private void ConfigureCast(EntityTypeBuilder<Cast> builder)
         {
             // specify your Fluent API rules.
             builder.ToTable("Cast");
             builder.HasKey(c => c.Id);
+            builder.HasIndex(c => c.Name);
             builder.Property(c => c.Name).HasMaxLength(128);
             builder.Property(c => c.ProfilePath).HasMaxLength(2084);
 
@@ -113,9 +108,9 @@ namespace Infrastructure.Data
         {
             // specify your Fluent API rules.
             builder.ToTable("MovieCast");
-            builder.HasNoKey();
-            builder.Property(mc => mc.Character).HasMaxLength(450);
-            builder.Property(mc => mc.Character).IsRequired();
+            builder.HasKey(mc => new { mc.CastId, mc.MovieId, mc.Character });
+            builder.HasOne(mc => mc.Movie).WithMany(mc => mc.MovieCasts).HasForeignKey(mc => mc.MovieId);
+            builder.HasOne(mc => mc.Cast).WithMany(mc => mc.MovieCasts).HasForeignKey(mc => mc.CastId);
 
         }
         private void ConfigureRole(EntityTypeBuilder<Role> builder)
@@ -127,44 +122,43 @@ namespace Infrastructure.Data
         private void ConfigureUser(EntityTypeBuilder<User> builder)
         {
             builder.ToTable("User");
+            builder.HasKey(u => u.Id);
+            builder.HasIndex(u => u.Email).IsUnique();
+            builder.Property(u => u.Email).HasMaxLength(256);
             builder.Property(u => u.FirstName).HasMaxLength(128);
             builder.Property(u => u.LastName).HasMaxLength(128);
-            builder.Property(u => u.DateOfBirth).HasColumnType("datetime2");
-            builder.Property(u => u.DateOfBirth).HasMaxLength(7);
-            builder.Property(u => u.Email).HasMaxLength(256);
             builder.Property(u => u.HashedPassword).HasMaxLength(1024);
+            builder.Property(u => u.PhoneNumber).HasMaxLength(16);
             builder.Property(u => u.Salt).HasMaxLength(1024);
-            builder.Property(u => u.LockoutEndDate).HasColumnType("datetime2");
-            builder.Property(u => u.LockoutEndDate).HasMaxLength(7);
-            builder.Property(u => u.LastLoginDateTime).HasColumnType("datetime2");
-            builder.Property(u => u.LastLoginDateTime).HasMaxLength(7);
+            builder.Property(u => u.ProfilePictureUrl).HasMaxLength(4096);
+            builder.Property(u => u.IsLocked).HasDefaultValue(false);
         }
-        private void ConfigureUserRole(EntityTypeBuilder<UserRole> builder)
-        {
-            builder.ToTable("UserRole");
-            builder.HasNoKey();
-        }
+        //private void ConfigureUserRole(EntityTypeBuilder<UserRole> builder)
+        //{
+        //    builder.ToTable("UserRole");
+        //    builder.HasNoKey();
+        //}
         private void ConfigureReview(EntityTypeBuilder<Review> builder)
         {
             builder.ToTable("Review");
-            builder.HasNoKey();
-            builder.Property(r => r.Rating).HasColumnType("decimal(3,2)");
-            //ask this
-            builder.Property(r => r.Rating).IsRequired(false);
+            builder.HasKey(r => new { r.MovieId, r.UserId });
+            builder.Property(r => r.ReviewText).HasMaxLength(20000);
+            builder.Property(r => r.Rating).HasColumnType("decimal(3, 2)");
+            builder.Property(r => r.CreatedDate).HasDefaultValueSql("getdate()");
         }
         private void ConfigurePurchase(EntityTypeBuilder<Purchase> builder)
         {
             builder.ToTable("Purchase");
             builder.HasKey(p => p.Id);
-            builder.Property(p => p.PurchaseNumber).HasColumnType("uniqueidentifier");
-            builder.Property(p => p.TotalPrice).HasColumnType("decimal(18,2)");
-            builder.Property(p => p.PurchaseDateTime).HasColumnType("datetime2");
-            builder.Property(p => p.PurchaseDateTime).HasMaxLength(7);
+            builder.Property(p => p.Id).ValueGeneratedOnAdd();
+            builder.Property(p => p.PurchaseNumber).ValueGeneratedOnAdd();
+            builder.HasIndex(p => new { p.UserId, p.MovieId }).IsUnique();
+            builder.Property(p => p.TotalPrice).HasColumnType("decimal(5, 2)");
         }
         private void ConfigureFavorite(EntityTypeBuilder<Favorite> builder)
         {
             builder.ToTable("Favorite");
-            builder.HasKey(b => b.Id);
+            builder.HasKey(f => new { f.MovieId, f.UserId });
         }
     }
 }

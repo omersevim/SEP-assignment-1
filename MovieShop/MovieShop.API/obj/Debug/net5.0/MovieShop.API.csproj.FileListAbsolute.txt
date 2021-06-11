@@ -8,6 +8,8 @@ C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debu
 C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\ref\MovieShop.API.dll
 C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\MovieShop.API.pdb
 C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\Humanizer.dll
+C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
 C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\Microsoft.Data.SqlClient.dll
 C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Abstractions.dll
@@ -23,6 +25,7 @@ C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debu
 C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\Microsoft.OpenApi.dll
 C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\Newtonsoft.Json.dll
+C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\PagedList.dll
 C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\omerc\Desktop\Homework\job\assignments\MovieShop\MovieShop.API\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll

@@ -10,8 +10,7 @@ namespace ApplicationCore.Entities
     {
         public int MovieId { get; set; }
         public int GenreId { get; set; }
-
-        //Navigation
+        //Navigation.
         public Movie Movie { get; set; }
         public Genre Genre { get; set; }
     }
